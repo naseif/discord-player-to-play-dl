@@ -11,6 +11,12 @@ class Player {
       tracks: searchForQuery,
     };
   }
+
+  async createQueue(guild, options) {
+    const guild = this.client.guilds.resolve(guild);
+    if (!guild)
+      throw new Error("Could not resolve guild! (Guild does not exist!)");
+  }
 }
 
 module.exports = Player;
