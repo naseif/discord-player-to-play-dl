@@ -1,6 +1,6 @@
 {
   "name": "discord-player-to-play-dl",
-  "version": "1.2.4",
+  "version": "1.2.6",
   "description": "A framework for discord music bots",
   "main": "index.js",
   "scripts": {
@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/naseif/discord-player-to-play-dl/issues"
   },
-  "homepage": "https://github.com/naseif/discord-player-to-play-dl#readme"
+  "homepage": "https://github.com/naseif/discord-player-to-play-dl#readme",
+  "dependencies": {
+    "i": "^0.3.6",
+    "npm": "^7.22.0",
+    "play-dl": "^0.7.9"
+  }
 }
