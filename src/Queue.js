@@ -1,4 +1,4 @@
-class Queue {
+export class Queue {
   constructor(player, guild, options) {
     this.player = player;
     this.guild = guild;
@@ -711,5 +711,3 @@ class Queue {
     return timeout;
   }
 }
-
-module.exports = { Queue };
