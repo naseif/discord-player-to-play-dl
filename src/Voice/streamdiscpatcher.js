@@ -1,5 +1,4 @@
-import {
-  AudioPlayer,
+const { AudioPlayer,
   AudioPlayerStatus,
   createAudioPlayer,
   createAudioResource,
@@ -7,13 +6,12 @@ import {
   StreamType,
   VoiceConnection,
   VoiceConnectionStatus,
-  VoiceConnectionDisconnectReason,
-} from "@discordjs/voice";
-import Track from "../Structures/Track";
-import { TypedEmitter as EventEmitter } from "tiny-typed-emitter";
-import Utilities from "../Util/Utilities.js";
+  VoiceConnectionDisconnectReason } = require("@discordjs/voice");
 
-export class StreamDispatcher extends EventEmitter {
+const TypedEmitter = require("tiny-typed-emitter");
+const { Utilities } = require("../Util/Utilities.js")
+
+class StreamDispatcher extends TypedEmitter {
   voiceConnection = null;
   audioPlayer = null;
   channel = null;
@@ -97,60 +95,62 @@ export class StreamDispatcher extends EventEmitter {
     this.voiceConnection.subscribe(this.audioPlayer);
   }
 
-  createStream(src, ops = {type?: "", data?: ""}) {
+  createStream(src, ops = { type?: "", data?: "" }) {
     this.audioResource = createAudioResource(src, {
       inputType: ops?.type ?? StreamType.Arbitrary,
       metadata: ops?.data,
-      inlineVolume: true, 
+      inlineVolume: true,
     });
     return this.audioResource;
   }
 
   status() {
     return this.audioPlayer.state.status;
-}
+  }
 
-disconnect() {
+  disconnect() {
     try {
-        this.audioPlayer.stop(true);
-        this.voiceConnection.destroy();
-    } catch {} 
-}
+      this.audioPlayer.stop(true);
+      this.voiceConnection.destroy();
+    } catch { }
+  }
 
-end() {
+  end() {
     this.audioPlayer.stop();
-}
+  }
 
-pause(interpolateSilence) {
-  const success = this.audioPlayer.pause(interpolateSilence);
-  this.paused = success;
-  return success;
-}
+  pause(interpolateSilence) {
+    const success = this.audioPlayer.pause(interpolateSilence);
+    this.paused = success;
+    return success;
+  }
 
-resume() {
-  const success = this.audioPlayer.unpause();
-  this.paused = !success;
-  return success;
-}
+  resume() {
+    const success = this.audioPlayer.unpause();
+    this.paused = !success;
+    return success;
+  }
 
-async playStream(resource = this.audioResource) {
-  if (!resource) throw new PlayerError("Audio resource is not available!", ErrorStatusCode.NO_AUDIO_RESOURCE);
-  if (resource.ended) return void this.emit("error", new PlayerError("Cannot play a resource that has already ended."));
-  if (!this.audioResource) this.audioResource = resource;
-  if (this.voiceConnection.state.status !== VoiceConnectionStatus.Ready) {
+  async playStream(resource = this.audioResource) {
+    if (!resource) throw new PlayerError("Audio resource is not available!", ErrorStatusCode.NO_AUDIO_RESOURCE);
+    if (resource.ended) return void this.emit("error", new PlayerError("Cannot play a resource that has already ended."));
+    if (!this.audioResource) this.audioResource = resource;
+    if (this.voiceConnection.state.status !== VoiceConnectionStatus.Ready) {
       try {
-          await entersState(this.voiceConnection, VoiceConnectionStatus.Ready, this.connectionTimeout);
+        await entersState(this.voiceConnection, VoiceConnectionStatus.Ready, this.connectionTimeout);
       } catch (err) {
-          return void this.emit("error", err );
+        return void this.emit("error", err);
       }
-  }
+    }
 
-  try {
+    try {
       this.audioPlayer.play(resource);
-  } catch (e) {
-      this.emit("error", e );
-  }
+    } catch (e) {
+      this.emit("error", e);
+    }
 
-  return this;
+    return this;
+  }
 }
-}
+
+module.exports = { StreamDispatcher }

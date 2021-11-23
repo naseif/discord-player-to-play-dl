@@ -1,4 +1,4 @@
-export class Queue {
+class Queue {
   constructor(player, guild, options) {
     this.player = player;
     this.guild = guild;
@@ -133,7 +133,7 @@ export class Queue {
     if (this.connection) this.connection.end();
     if (disconnect) this.connection?.disconnect();
     this.player.queues.delete(this.guild.id);
-    this.player.voiceUtils.cache.delete(this.guild.id);
+    // this.player.voiceUtils.cache.delete(this.guild.id);
     this._destroyed = true;
   }
 
@@ -711,3 +711,5 @@ export class Queue {
     return timeout;
   }
 }
+
+module.exports = { Queue };

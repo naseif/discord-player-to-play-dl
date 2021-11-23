@@ -1,4 +1,4 @@
-export class Track {
+class Track {
   title = null;
   url = null;
   thumbnail = {};
@@ -27,3 +27,4 @@ export class Track {
     this.private = tracks?.private || tracks?.videos?.private || false;
   }
 }
+module.exports = { Track };

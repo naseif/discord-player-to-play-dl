@@ -3,4 +3,4 @@ class Utilities {
     return new Promise((r) => setTimeout(r, time).unref());
   }
 }
-export { Utilities };
+module.exports = { Utilities };

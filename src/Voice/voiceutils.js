@@ -1,4 +1,4 @@
-export class VoiceUtils {
+class VoiceUtils {
   /**
    *
    * @param {VoiceChannel} channels
@@ -44,9 +44,11 @@ export class VoiceUtils {
    * @param {VoiceConnection} connection
    * @returns
    */
-  
+
   disconnect(connection) {
     if (connection) return connection.voiceConnection.destroy();
     return connection.destroy();
   }
 }
+
+module.exports = { VoiceUtils };
